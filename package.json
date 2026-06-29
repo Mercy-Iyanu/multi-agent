@@ -1,0 +1,36 @@
+{
+  "name": "@routestack/multi-agent",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Multi-agent trip planner using RouteStack MCP",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "start:server": "tsx src/server.ts",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:ui\"",
+    "dev:server": "tsx --watch src/server.ts",
+    "dev:ui": "cd ui && npm run dev",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.52.0",
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "chalk": "^5.6.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^4.21.0",
+    "marked": "^9.1.6",
+    "marked-terminal": "^6.2.0",
+    "openai": "^4.104.0",
+    "ora": "^9.4.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.2.14",
+    "concurrently": "^9.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.8.3"
+  }
+}
