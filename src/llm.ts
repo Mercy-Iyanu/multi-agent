@@ -1,5 +1,7 @@
 import OpenAI from "openai";
+import type { ChatCompletionMessageParam } from "openai/resources/chat/completions";
 import Anthropic from "@anthropic-ai/sdk";
+import type { MessageParam, Tool, ToolUseBlock } from "@anthropic-ai/sdk/resources/messages";
 import { config } from "./config.js";
 import { callTool, type McpTool, type McpToolResult } from "./mcp-client.js";
 import { ToolExecutionContext } from "./types.js";
@@ -113,7 +115,7 @@ async function chatOpenAICompatible(
   onToolCall?: OnToolCall,
 ): Promise<ChatResult> {
   const contextPrompt = buildContextPrompt(context);
-  const openaiMessages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [
+  const openaiMessages: ChatCompletionMessageParam[] = [
     { role: "system", content: SYSTEM_PROMPT },
     { role: "system", content: contextPrompt },
     ...messages.map((m) => ({
@@ -244,7 +246,7 @@ async function chatAnthropic(
   const client = new Anthropic({ apiKey: config.llm.anthropic.apiKey });
   const contextPrompt = buildContextPrompt(context);
 
-  const anthropicMessages: Anthropic.MessageParam[] = messages.map((m) => ({
+  const anthropicMessages: MessageParam[] = messages.map((m) => ({
     role: m.role,
     content: m.content,
   }));
@@ -258,12 +260,12 @@ async function chatAnthropic(
       tools: tools.map((t) => ({
         name: t.name,
         description: t.description,
-        input_schema: t.inputSchema as Anthropic.Tool.InputSchema,
+        input_schema: t.inputSchema as Tool.InputSchema,
       })),
     });
 
     const toolUses = response.content.filter(
-      (b): b is Anthropic.ToolUseBlock => b.type === "tool_use",
+      (b): b is ToolUseBlock => b.type === "tool_use",
     );
 
     if (!toolUses.length) {
